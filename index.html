@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎉 Happy Birthday 🎂</title>
+
+<link rel="icon" type="image/png" href="static/favicon.jpg">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  /* --- BACKGROUND --- */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('static/collage.png') center/cover no-repeat;
+    background-color: #1a1a2e; 
+    filter: blur(1.5px);
+    filter: blur(1.5px);
+
+    transform: scale(1.1);
+    z-index: -1;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  /* --- 1. HEADER STYLES --- */
+  .header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5vh;
+    gap: 15px; 
+    /* Ensure this container doesn't grab the footer elements */
+    position: relative; 
+    z-index: 10;
+  }
+
+  .round-header-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 3em;
+    color: #22abc4;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+  }
+
+  /* --- 2. MIDDLE SECTION STYLES --- */
+  .handwritten-box {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    color: #e0f7fa;
+    text-align: center;
+    padding: 1rem;
+    margin: 1rem auto;
+    max-width: 800px;
+    line-height: 1.4;
+    text-shadow: 1px 1px 2px black;
+  }
+
+  #openBtn {
+    display: block;
+    margin: 30px auto;
+    padding: 18px 45px;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(45deg, #ff0055, #ff5e00);
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+  }
+
+  #openBtn:hover {
+    transform: scale(1.1);
+  }
+
+  /* --- 3. FOOTER STYLES (Strictly Bottom) --- */
+  .intro-footer {
+    position: fixed;    /* Forces it to stay at viewport position */
+    bottom: 20px;       /* Stick to bottom */
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.6rem;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.9);
+    z-index: 50;
+    pointer-events: none; /* Lets clicks pass through */
+    padding: 0 20px;
+    /* Ensure elements inside align nicely */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Style for the image INSIDE the footer */
+  .footer-funny-img {
+    display: inline-block;
+    height: 60px;
+    width: auto;
+    border-radius: 10px;
+    border: 2px solid #fff;
+    margin: 10px 0; /* Add space top and bottom */
+    transform: rotate(-10deg);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+  }
+
+  /* --- PHOTOS & VIEWER --- */
+  .photo {
+    position: absolute;
+    width: clamp(120px, 20vw, 220px);
+    height: clamp(120px, 20vw, 220px);
+    object-fit: cover;
+    border-radius: 10px;
+    border: 3px solid white;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    opacity: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    transition: all 1s ease-out;
+    cursor: pointer;
+    background: #000;
+  }
+  .photo.active { opacity: 1; }
+
+  #viewer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 999999;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  #mediaContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 75%;
+  }
+  #mediaContainer img, #mediaContainer video {
+    max-width: 95%;
+    max-height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 0 40px rgba(255,255,255,0.15);
+    animation: slideIn 0.6s ease-out;
+  }
+  @keyframes slideIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+  }
+
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 4em;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    padding: 20px;
+    z-index: 1000000;
+  }
+  #prev { left: 20px; }
+  #next { right: 20px; }
+  #close {
+    margin-top: 20px;
+    padding: 10px 30px;
+    font-size: 1.2em;
+    border-radius: 25px;
+    background: rgba(220, 20, 60, 0.8);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .header-container { flex-direction: column; margin-top: 30px; gap: 10px; }
+    h1 { font-size: 2em; }
+    .handwritten-box { font-size: 1.2rem; }
+    .intro-footer { font-size: 1.1rem; bottom: 10px; }
+    .footer-funny-img { height: 45px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header-container">
+    <h1>🎂 Happy Birthday!! 🎉</h1>
+</div> 
+<div class="handwritten-box"> 
+    your smile makes the whole world feel softer. Keep Smiling 🙂
+</div>
+
+<button id="openBtn">LES GO!!!!!</button>
+
+
+<div class="intro-footer">
+    I know I'm a little late... but good things take time! 🐢 <br>
+    
+    <!-- <img src="static/favicon.png" class="footer-funny-img" alt="funny"> -->
+    
+    Sorry! & Happy Birthday to my Best Friend! 💖
+</div>
+
+
+<audio id="bgMusic" loop>
+    <source src="happy-birthday-357371.mp3" type="audio/mpeg">
+    <button onclick="document.getElementById('happy-birthday-357371.mp3').play()">Play Music</button>
+</audio>
+
+<img src="static/img1.jpg" class="photo">
+<img src="static/img2.jpg" class="photo">
+<img src="static/img3.jpg" class="photo">
+<img src="static/img4.jpg" class="photo">
+<img src="static/img5.jpg" class="photo">
+<img src="static/img6.jpg" class="photo">
+<img src="static/img7.jpg" class="photo">
+<img src="static/img8.jpg" class="photo">
+<img src="static/img9.jpg" class="photo">
+<img src="static/img10.jpg" class="photo">
+<img src="static/img11.jpg" class="photo">
+<img src="static/img12.jpg" class="photo">
+<img src="static/img13.jpg" class="photo">
+<img src="static/img14.jpg" class="photo">
+<img src="static/img15.jpg" class="photo">
+<!-- <img src="static/img16.jpg" class="photo">
+<img src="static/img17.jpg" class="photo">
+<img src="static/img18.jpg" class="photo">
+<img src="static/img19.jpg" class="photo">
+<img src="static/img20.jpg" class="photo">
+<img src="static/img21.jpg" class="photo">
+<img src="static/img22.jpg" class="photo">
+<img src="static/img23.jpg" class="photo">
+<img src="static/img24.jpg" class="photo">
+<img src="static/img25.jpg" class="photo"> -->
+
+<!-- <video src="static/vid1.mp4" class="photo" muted></video>
+<video src="static/vid2.mp4" class="photo" muted></video>
+<video src="static/vid3.mp4" class="photo" muted></video>
+<video src="static/vid4.mp4" class="photo" muted></video>
+<video src="static/vid5.mp4" class="photo" muted></video>
+<video src="static/vid6.mp4" class="photo" muted></video>
+<video src="static/vid7.mp4" class="photo" muted></video> -->
+
+<div id="viewer">
+  <span id="prev" class="nav-btn">&#10094;</span>
+  <div id="mediaContainer"></div>
+  <span id="next" class="nav-btn">&#10095;</span>
+  <button id="close">Stop Slideshow ✖</button>
+</div>
+
+<script>
+const openBtn = document.getElementById('openBtn');
+const photos = document.querySelectorAll('.photo');
+const viewer = document.getElementById('viewer');
+const closeBtn = document.getElementById('close');
+const nextBtn = document.getElementById('next');
+const prevBtn = document.getElementById('prev');
+const mediaContainer = document.getElementById('mediaContainer');
+const introFooter = document.querySelector('.intro-footer');
+const bgMusic = document.getElementById('bgMusic');
+
+let currentIndex = 0;
+let autoSlideTimeout = null; 
+
+openBtn.onclick = () => {
+    openBtn.style.display = 'none';
+    introFooter.style.display = 'none'; 
+    bgMusic.volume = 0.5;
+    bgMusic.play().catch(e => console.log(e));
+    photos.forEach(p => p.classList.remove('active'));
+
+    setTimeout(() => {
+        photos.forEach((p, i) => {
+            setTimeout(() => {
+                const randomX = Math.random() * 85 + 5; 
+                const randomY = Math.random() * 85 + 5; 
+                const randomRot = Math.random() * 60 - 30; 
+                const randomZ = Math.floor(Math.random() * 50); 
+                p.style.left = randomX + 'vw';
+                p.style.top = randomY + 'vh';
+                p.style.transform = `translate(-50%, -50%) scale(1) rotate(${randomRot}deg)`;
+                p.style.zIndex = randomZ;
+                p.classList.add('active'); 
+            }, i * 80); 
+        });
+        setTimeout(() => {
+            currentIndex = Math.floor(Math.random() * photos.length);
+            showMedia(); 
+        }, 3500);
+    }, 100);
+};
+
+function showMedia() {
+    if (autoSlideTimeout) clearTimeout(autoSlideTimeout);
+    viewer.style.display = "flex";
+    setTimeout(() => { viewer.style.opacity = 1; }, 10);
+    mediaContainer.innerHTML = ""; 
+    let item = photos[currentIndex];
+    if (!item) return;
+    let clonedItem = item.cloneNode(true);
+    clonedItem.classList.remove('photo', 'active'); 
+    clonedItem.style.transform = '';
+    clonedItem.style.left = '';
+    clonedItem.style.top = '';
+    clonedItem.style.zIndex = '';
+
+    if (clonedItem.tagName === "VIDEO") {
+        clonedItem.controls = true;
+        clonedItem.autoplay = true; 
+        clonedItem.muted = true; 
+        mediaContainer.appendChild(clonedItem);
+        clonedItem.onended = () => { goNext(); };
+    } else {
+        mediaContainer.appendChild(clonedItem);
+        autoSlideTimeout = setTimeout(() => { goNext(); }, 4000);
+    }
+}
+
+function goNext() {
+    currentIndex = (currentIndex + 1) % photos.length;
+    showMedia();
+}
+function goPrev() {
+    currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+    showMedia();
+}
+nextBtn.onclick = (e) => { e.stopPropagation(); goNext(); };
+prevBtn.onclick = (e) => { e.stopPropagation(); goPrev(); };
+function closeViewer() {
+    viewer.style.opacity = 0; 
+    if (autoSlideTimeout) clearTimeout(autoSlideTimeout);
+    setTimeout(() => {
+        viewer.style.display = "none";
+        mediaContainer.innerHTML = ""; 
+    }, 500); 
+}
+closeBtn.onclick = closeViewer;
+viewer.onclick = (e) => { if(e.target === viewer) closeViewer(); };
+photos.forEach((item, index) => {
+    item.addEventListener("click", () => {
+        currentIndex = index;
+        showMedia();
+    });
+});
+</script>
+
+</body>
+
+</html>
+
